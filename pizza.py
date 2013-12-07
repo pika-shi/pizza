@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-import argparse, math, sys
+import argparse, math, sys,re
 
 def main():
     parser = argparse.ArgumentParser(description='Let\'s order pizza!')
@@ -13,10 +13,41 @@ def main():
                         nargs='+', help='number of pizza')
 
     args = parser.parse_args()
-
+    """
     if not (len(args.kind) == len(args.size) == len(args.num)):
         print 'Error: You have to equalize num of arguments(k, s, and n).'
         sys.exit()
+    """ 
+    contact_dict = {}
+    contact_number = -1
+    for line in open('.pizza.conf','r'):
+        if not line.rstrip().strip():
+            continue
+        
+        if line.rstrip() == 'contact:':
+            contact_number += 1
+            contact_dict[contact_number] = {}
+     
+        contact_dict[contact_number][line.rstrip().split(':')[0].strip()] =  line.rstrip().split(':')[1].strip()
+    
+    #validate contact
+    for i in range (contact_number + 1):
+        phone_pattern = re.compile(r'^(\d{3})(-)?(\d{3,4})(-)?(\d{4})$')
+        if not(phone_pattern.match(contact_dict[i]['tel'])):
+            print 'Error: Invalid Phone Number '
+            sys.exit()
+
+
+        if not ( 30 <= int(contact_dict[i]['delivery_limit_time']) <= 60 ):
+            print "Error: delibery_limit_time must be between 30 and 60"
+            sys.exit()
+
+        regexp = re.compile(r'^(?:\xE3\x81[\x81-\xBF]|\xE3\x82[\x80-\x93])+$')
+        result = regexp.search(contact_dict[i]['name'])
+        if result == None :
+            print 'Error: name must be full-width hiragana' 
+            sys.exit()
+
 
     pizza_dict = {}
     for line in open("pizza_list.txt","r"):
