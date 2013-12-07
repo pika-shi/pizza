@@ -52,8 +52,7 @@ def main():
     pizza_dict = {}
     for line in open("pizza_list.txt","r"):
         pizza_info = line.strip().split(',')
-        pizza_dict[int(pizza_info[0])] = {'name':pizza_info[1], 'price':int(pizza_info[2])}
-
+        pizza_dict[int(pizza_info[0])] = {'name':pizza_info[1], 'name_for_twillio':pizza_info[2], 'price':int(pizza_info[3])}
     # 電話する
     kind_list = [pizza_dict[kind]['name'] for kind in args.kind]
     #call(name=name, tel=tel, dlt=dlt, kind_list=kind_list, size_list=args.size,
