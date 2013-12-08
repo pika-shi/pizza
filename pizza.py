@@ -12,7 +12,6 @@ def main():
         description += str(k) + ': ' + v['name'] + ' ￥' + str(v['price']) + '\n'
 
     args = parse(description)
-
     if not (len(args.kind) == len(args.size) == len(args.num)):
         print 'Error: You have to equalize num of arguments(k, s, and n).'
         sys.exit()
