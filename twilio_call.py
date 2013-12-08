@@ -7,9 +7,9 @@ from twilio.rest import TwilioRestClient
 
 
 class TwilioCall(object):
-	account_sid = "ACb57f2ba02b0594ac7083a12f5705338f"
-	auth_token = "9c2dd01f116a76fc868a864002894efd"
-	from_phonenumber = "+815031318968"
+	account_sid = "*****"
+	auth_token = "*****"
+	from_phonenumber = "+81503131****"
 	base_url = "http://o-tomox.com/~satoshi/pizza.php"
 
 	def __init__(self):
