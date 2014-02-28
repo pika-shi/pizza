@@ -18,11 +18,17 @@ def main():
 
         while flag:
             print 'input pizza number(1-26)'
-            args.kind.append(raw_input())
+            tmpInput = int(raw_input())
+            order_validation(args.kind,(1 <= tmpInput <= 26),tmpInput)
+            
             print 'input size of pizza (35 or 45)'
-            args.size.append(raw_input())
+            tmpInput = int(raw_input())
+            order_validation(args.size,(tmpInput == 35 or tmpInput == 45),tmpInput)
+
             print 'input number of pizza(1-)'
-            args.num.append(raw_input())
+            tmpInput = int(raw_input())
+            order_validation(args.num,(1 <= tmpInput),tmpInput)
+
             print 'Do you order another pizza?(y/n)'
             if raw_input() != 'y':
                 flag = False
@@ -49,6 +55,12 @@ def main():
                               'dlt':contact_dict[0]['delivery_limit_time'],
                               'kind_list':kind_list, 'size_list':args.size, 'num_list':args.num})
     """
+
+def order_validation(order_list,resultOfValidation,input_value):
+    if not(resultOfValidation):
+        print 'Error:invalid input value'
+        sys.exit()
+    order_list.append(input_value)
 
 def get_pizza_dict():
     pizza_dict = {}
