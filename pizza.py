@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import argparse, math, sys, re
+import argparse, math, os, sys, re
 from collections import defaultdict
 from twilio_call import TwilioCall
 
@@ -12,7 +12,7 @@ def main():
         description += str(k) + ': ' + v['name'] + ' ￥' + str(v['price']) + '\n'
 
     args = parse(description)
-    
+
     if args.menu == True:
         print description
 
@@ -28,7 +28,6 @@ def main():
     TwilioCall().order_pizza({'name':contact_dict[0]['name'], 'tel':contact_dict[0]['tel'],
                               'dlt':contact_dict[0]['delivery_limit_time'],
                               'kind_list':kind_list, 'size_list':args.size, 'num_list':args.num})
-    print int(calc_charge(pizza_dict, args.kind, args.num))
 
 def get_pizza_dict():
     pizza_dict = {}
@@ -51,10 +50,19 @@ def parse(description):
     parser.add_argument('-n', '--num', type=int, dest='num', default=[1],
                         nargs='+', help='number of pizza')
     parser.add_argument('-m','--menu',dest='menu',action='store_true', help='shows the list of pizzas')
-   
+
     return parser.parse_args()
 
 def get_contact_dict():
+    if not os.path.exists('./.pizza.conf'):
+        with open('.pizza.conf', 'w') as f:
+            f.write('contact:\n')
+            print 'Input your phone number.'
+            f.write('    tel: {0}\n'.format(raw_input()))
+            print 'Input your name.'
+            f.write('    name: {0}\n'.format(raw_input()))
+            print 'Input delivery limit time.'
+            f.write('    delivery_limit_time: {0}\n'.format(raw_input()))
     contact_dict, contact_num = defaultdict(dict), 0
     with open('.pizza.conf','r') as f:
         for l in f:
