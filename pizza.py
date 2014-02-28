@@ -12,6 +12,10 @@ def main():
         description += str(k) + ': ' + v['name'] + ' ￥' + str(v['price']) + '\n'
 
     args = parse(description)
+    
+    if args.menu == True:
+        print description
+
     if not (len(args.kind) == len(args.size) == len(args.num)):
         print 'Error: You have to equalize num of arguments(k, s, and n).'
         sys.exit()
@@ -24,7 +28,6 @@ def main():
     TwilioCall().order_pizza({'name':contact_dict[0]['name'], 'tel':contact_dict[0]['tel'],
                               'dlt':contact_dict[0]['delivery_limit_time'],
                               'kind_list':kind_list, 'size_list':args.size, 'num_list':args.num})
-
     print int(calc_charge(pizza_dict, args.kind, args.num))
 
 def get_pizza_dict():
@@ -47,7 +50,8 @@ def parse(description):
                         default=[45], nargs='+', help='size of pizza')
     parser.add_argument('-n', '--num', type=int, dest='num', default=[1],
                         nargs='+', help='number of pizza')
-
+    parser.add_argument('-m','--menu',dest='menu',action='store_true', help='shows the list of pizzas')
+   
     return parser.parse_args()
 
 def get_contact_dict():
@@ -67,7 +71,7 @@ def validate_contact(contact_dict):
             sys.exit()
 
         if not ( 30 <= int(v['delivery_limit_time']) <= 60 ):
-            print "Error: delibery_limit_time must be between 30 and 60"
+            print "Error: delivery_limit_time must be between 30 and 60"
             sys.exit()
 
         regexp = re.compile(r'^(?:\xE3\x81[\x81-\xBF]|\xE3\x82[\x80-\x93])+$')
